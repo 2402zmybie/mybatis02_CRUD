@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hr.dao.IUserDao">
+    <select id="findAll" resultType="User">
+        select * from user;
+    </select>
+
+    <!-- parameterType是传值参数类型-->
+    <insert id="saveUser" parameterType="com.hr.domain.User">
+        /*配置插入操作后,获取插入数据的id*/
+        <selectKey keyProperty="id" databaseId="id" resultType="int" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+        insert into user(username,birthday,sex,address) values (#{username},#{birthday},#{sex},#{address});
+    </insert>
+
+    <update id="updateUser" parameterType="com.hr.domain.User">
+        update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=#{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="Integer">
+        delete from user where id=#{uid}
+    </delete>
+
+    <select id="findById" parameterType="int" resultType="com.hr.domain.User">
+        select * from user where id=#{aaa}
+    </select>
+
+    <select id="findByName" parameterType="String" resultType="com.hr.domain.User">
+        select * from user where username like #{username}
+    </select>
+
+    <select id="findTotal" resultType="int">
+        select count(*) from user
+    </select>
+
+<!--    根据QueryVo类的条件查询用户-->
+    <select id="findUserByVo" parameterType="com.hr.domain.QueryVo" resultType="com.hr.domain.User">
+        select * from user where username like #{user.username}
+    </select>
+
+
+</mapper>
